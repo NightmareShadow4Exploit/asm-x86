@@ -1,0 +1,13 @@
+Copyright (c) 2024 Saiyed Mujtaba
+
+All rights reserved.
+
+This book, "asm x86 by NIGHTMARE," including all associated files and content, is copyrighted by Saiyed Mohammad Mujtaba. This book is made available for personal, non-commercial use only. You may not reproduce, distribute, publish, display, modify, or create derivative works from any part of this book without explicit permission from the copyright holder.
+
+For inquiries regarding commercial use, permissions, or any other questions, please contact nightmareshadow4exploit@gmail.com.
+
+Unauthorized use, reproduction, or distribution of this book or any part thereof may result in civil and criminal penalties.
+
+Saiyed Mohammad Mujtaba
+nightmareshadow4exploit@gmail.com
+2/28/2024
