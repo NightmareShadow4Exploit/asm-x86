@@ -556,6 +556,190 @@ _start:
 <li>The result in EAX is moved back to memory location result.</li>
 <h4>Exiting Program:</h4>
 <li>The program exits by executing a system call to exit the process with a success status code.</li>
+
+
+<hr>
+<h3>Example: Subtracting Two Numbers</h3>
+
+<div class="code-block">
+    <pre>
+section .data
+    num1 dd 20       ; Define a double word (4 bytes) variable 'num1' with value 20
+    num2 dd 10       ; Define a double word (4 bytes) variable 'num2' with value 10
+    result dd 0      ; Define a double word (4 bytes) variable 'result' initialized to 0
+
+section .text
+    global _start
+
+_start:
+    ; Move data from memory to registers
+    mov eax, dword [num1]  ; Move the value of 'num1' into register EAX
+    mov ebx, dword [num2]  ; Move the value of 'num2' into register EBX
+    
+    ; Perform subtraction operation
+    sub eax, ebx           ; Subtract the value in EBX from EAX
+    
+    ; Move result from register to memory
+    mov dword [result], eax ; Move the result into memory location 'result'
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+
+
+
+    +-------------------+
+    |      Control      |
+    |       Unit        |
+    +---------+---------+
+              |
+    +---------+---------+
+    |                   |
++---------+---------+ +---------+---------+
+|        Data       | |        Text       |
+|        Segment    | |       Segment     |
+|                   | |                   |
+|  num1:   20       | |     _start:       |
+|  num2:   10       | |                   |
+|  result: 0        | |  mov eax, dword   |
+|                   | |     [num1]        |
++---------+---------+ |  mov ebx, dword   |
+          |           |     [num2]        |
++---------+---------+ |  sub eax, ebx     |
+|                   | |  mov dword        |
+|                   | |     [result], eax |
+|                   | |  mov eax, 1       |
+|                   | |  xor ebx, ebx     |
+|                   | |  int 0x80         |
++-------------------+ +-------------------+
+
+after sub the result will be result: 10
+
+</pre>
+</div>
+<h3>Explanation:</h3>
+<h4>Initialization:</h4>
+<li>The program starts execution at the _start label.</li>
+<li>Data segment initializes memory locations num1, num2, and result with values 20, 10, and 0 respectively.</li>
+<h4>Moving Data:</h4>
+<li>The values of num1 and num2 are moved from memory to the EAX and EBX registers using MOV instructions.</li>
+<h4>Arithmetic Operation:</h4>
+<li>The SUB instruction subtracts the value in EBX from the value in EAX, storing the result in EAX.</li>
+<h4>Moving Result:</h4>
+<li>The result in EAX is moved back to memory location result.</li>
+<h4>Exiting Program:</h4>
+<li>The program exits by executing a system call to exit the process with a success status code.</li>
+<hr>
+<h2>MUL and DIV</h2>
+<p>Certainly! Let's combine examples for the MUL (multiplication) and DIV (division) instructions in assembly language.</p>
+<h3>Example: Multiplication and Division</h3>
+
+<div class="code-block">
+    <pre>
+section .data
+    num1 dd 20       ; Define a variable 'num1' with value 20
+    num2 dd 5        ; Define a variable 'num2' with value 5
+    result_mul dd 0  ; Define a variable 'result_mul' initialized to 0
+    result_div dd 0  ; Define a variable 'result_div' initialized to 0
+    
+section .text
+    global _start
+
+_start:
+    ; Move data from memory to registers for multiplication
+    mov eax, dword [num1]  ; Move the value of 'num1' into register EAX
+    mov ebx, dword [num2]  ; Move the value of 'num2' into register EBX
+    
+    ; Perform multiplication operation
+    imul eax, ebx          ; Multiply the value in EAX by the value in EBX
+                           ; Result is stored in EAX
+    
+    ; Move result from register to memory for multiplication
+    mov dword [result_mul], eax ; Move the result into memory location 'result_mul'
+    
+    ; Move data from memory to registers for division
+    mov eax, dword [result_mul] ; Move the result of multiplication into EAX
+    mov ebx, dword [num2]       ; Move the value of 'num2' into EBX (divisor)
+    
+    ; Perform division operation
+    xor edx, edx          ; Clear EDX register (quotient is stored in EAX)
+    div eax, ebx               ; Divide the value in EAX by the value in EBX
+                           ; Quotient is stored in EAX, remainder in EDX
+    
+    ; Move result from register to memory for division
+    mov dword [result_div], eax ; Move the quotient into memory location 'result_div'
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+    
+
+
+    +-------------------+
+    |      Control      |
+    |       Unit        |
+    +---------+---------+
+              |
+    +---------+---------+
+    |                   |
++---------+---------+ +---------+---------+
+|        Data       | |        Text       |
+|        Segment    | |       Segment     |
+|                   | |                   |
+|  num1:        20  | |     _start:       |
+|  num2:         5  | |                   |
+|  result_mul:   0  | |  mov eax, dword   |
+|  result_div:   0  | |     [num1]        |
++---------+---------+ |  mov ebx, dword   |
+          |           |     [num2]        |
++---------+---------+ |  mul ebx          |
+|                   | |  mov dword        |
+|                   | |     [result_mul], |
+|                   | |     eax           |
+|                   | |  mov eax, dword   |
+|                   | |     [result_mul]  |
+|                   | |  mov ebx, dword   |
+|                   | |     [num2]        |
+|                   | |  xor edx, edx     |
+|                   | |  div ebx          |
+|                   | |  mov dword        |
+|                   | |     [result_div], |
+|                   | |     eax           | 
+|                   | |  mov eax, 1       |
+|                   | |  xor ebx, ebx     |
+|                   | |  int 0x80         |
++-------------------+ +-------------------+
+
+    </pre>
+</div>
+
+<h3>Explanation:</h3>
+<h4>Multiplication</h4>
+<li>The values of num1 and num2 are moved from memory to the EAX and EBX registers using MOV instructions.</li>
+<li>The MUL instruction multiplies the values in EAX and EBX, storing the result in EDX:EAX.</li>
+<li>The lower 32 bits of the result are moved to memory location result_mul.</li>
+<h4>Division</h4>
+<li>The result of multiplication is moved back to EAX for division.</li>
+<li>The value of num2 (divisor) is moved to EBX.</li>
+<li>The DIV instruction divides the value in EAX by the value in EBX, storing the quotient in EAX and the remainder in EDX.</li>
+<li>The quotient is moved to memory location result_div.</li>
+
+<p>The main difference between MUL and IMUL is that MUL is used for unsigned multiplication and stores the result in the EDX:EAX register pair, while IMUL is used for signed multiplication and stores the result in the specified register, typically EAX.
+</p>
+
+<p>This example demonstrates how the MUL and DIV instructions are used to perform multiplication and division, respectively, in assembly language. Let me know if you have any questions or if you'd like further explanation!</p>
+
+
+
+
+
+
+
+
+
+
 <h3>Conclusion:</h3>
 
 <p>In this chapter, we've explored the concept of registers in x86 assembly language and discussed the different types of registers and their roles. We've also examined the various data types supported by x86 assembly language and how they are represented and manipulated using registers.
