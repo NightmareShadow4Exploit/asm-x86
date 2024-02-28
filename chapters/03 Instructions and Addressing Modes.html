@@ -193,7 +193,8 @@ do they have shortforms?</h3>
 <li>The size of each variable is implicitly determined as a double word (DWORD) based on the dd directive.</li>
 <br>
 <p>While the explicit data type specifiers like BYTE, WORD, etc., can be used for clarity and readability, it's common in assembly language programming to directly specify the size of data using memory allocation directives.</p>
-
+<hr>
+<h2>Data Movement Instructions:</h2>
 
 
 <h3>MOV Instruction</h3>
@@ -396,10 +397,167 @@ and what is the role of that 0 after %d --> format db "%d",0?
 <li>Yes, 0x80 and 80h represent the same hexadecimal value, which is 128 in decimal.</li>
 
 
+<hr>
+<h3>XCHG Instruction:</h3>
+<div class="code-block">
+    <pre>
+section .data
+    variable1 dd 10      ; Define a double word variable 'variable1' with value 10
+    variable2 dd 20      ; Define a double word variable 'variable2' with value 20
+    
+section .text
+    global _start
+
+_start:
+    ; Exchange the contents of two registers
+    mov eax, dword [variable1]  ; Move the value of 'variable1' into register EAX
+    mov ebx, dword [variable2]  ; Move the value of 'variable2' into register EBX
+    xchg eax, ebx               ; Exchange the contents of registers EAX and EBX
+    ; After this instruction, EAX will hold the value 20 and EBX will hold the value 10
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+
+    </pre>
+</div>
+
+<h3>ASCII Diagram for XCHG(exchange):</h3>
+<div class="code-block">
+    <pre>
+        
+        XCHG Operation:
+            EAX    EBX
+             |      |
+             V      V
+        +--------+--------+
+        |   20   |   10   |   <-- Values in registers after XCHG
+        +--------+--------+
+        
+    </pre>
+</div>
 
 
+<p>This diagram illustrates how the XCHG instruction exchanges the contents of two registers (EAX and EBX) in the CPU and how the CPU communicates with memory via the data and address buses.</p>
+<h3>Code Explanation:</h3>
+<h4>Data Section:</h4>
+<li>In the .data section, two double word (4 bytes) variables variable1 and variable2 are defined.</li>
+<li>variable1 is initialized with the value 10, and variable2 is initialized with the value 20.</li>
+<h4>Text Section:</h4>
+<li>The .text section contains the executable instructions.</li>
+<h4>Global Label:</h4>
+<li>The _start label is declared as a global label, indicating the entry point of the program.</li>
+<h4>Exchange Contents of Registers:</h4>
+<li>mov eax, dword [variable1]: This instruction loads the value of variable1 (10) into the EAX register.</li>
+<li>mov ebx, dword [variable2]: This instruction loads the value of variable2 (20) into the EBX register.</li>
+<li>xchg eax, ebx: This instruction exchanges the contents of EAX and EBX registers. After this instruction, EAX will hold the value 20, and EBX will hold the value 10.</li>
+<h4>Exit the Program:</h4>
+<li>mov eax, 1: This instruction loads the system call number for the sys_exit system call into the EAX register. In Linux, the sys_exit system call is used to terminate the program.</li>
+<li>xor ebx, ebx: This instruction clears the EBX register by performing an XOR operation with itself, effectively setting it to zero. This sets the exit status code to 0, indicating successful termination.</li>
+<li>int 0x80: This instruction triggers a software interrupt (int) with the interrupt number 0x80. In Linux, this is used to invoke system calls. Here, it invokes the sys_exit system call, which terminates the program with the exit status code specified in EBX.</li>
 
+<h4>Explanation of xchg Instruction:</h4>
+<p>The xchg instruction exchanges the contents of two operands. In the provided code, xchg eax, ebx exchanges the contents of the EAX and EBX registers, effectively swapping the values stored in them.
+</p>
+<h4>Conclusion:</h4>
+<p>This code snippet demonstrates how to use the xchg instruction to exchange the contents of two registers (EAX and EBX). After exchanging, the program terminates successfully.</p>
+
+<hr>
+
+<h2>Arithmetic and Logic Instructions:</h2>
+<li>ADD: Adds two operands.</li>
+<li>SUB: Subtracts one operand from another.</li>
+<li>MUL: Multiplies two operands.</li>
+<li>DIV: Divides one operand by another.</li>
+<li>INC: Increments the value of an operand by 1.</li>
+<li>DEC: Decrements the value of an operand by 1.</li>
+<li>AND: Performs a bitwise AND operation on two operands.</li>
+<li>OR: Performs a bitwise OR operation on two operands.</li>
+<li>XOR: Performs a bitwise XOR (exclusive OR) operation on two operands.</li>
+<li>NOT: Performs a bitwise NOT operation on an operand.</li>
+<li>SHL: Shifts the bits of an operand to the left.</li>
+<li>SHR: Shifts the bits of an operand to the right.</li>
+<h3>ADD</h3>
+<p>Here's an example demonstrating the use of the ADD instruction in assembly language:</p>
+<h3>Example: Adding Two Numbers</h3>
+<div class="code-block">
+    <pre>
+section .data
+    num1 dd 10       ; Define a double word (4 bytes) variable 'num1' with value 10
+    num2 dd 20       ; Define a double word (4 bytes) variable 'num2' with value 20
+    result dd 0      ; Define a double word (4 bytes) variable 'result' initialized to 0
+
+section .text
+    global _start
+
+_start:
+    ; Move data from memory to registers
+    mov eax, dword [num1]  ; Move the value of 'num1' into register EAX
+    mov ebx, dword [num2]  ; Move the value of 'num2' into register EBX
+    
+    ; Perform addition operation
+    add eax, ebx           ; Add the values in EAX
+    
+    ; Move result from register to memory
+    mov dword [result], eax ; Move the result into memory location 'result'
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+    
+    </pre>
+</div>
+
+
+<h3>ASCII Diagram:</h3>
+<div class="code-block">
+<pre>
+    +-------------------+
+    |      Control      |
+    |       Unit        |
+    +---------+---------+
+              |
+    +---------+---------+
+    |                   |
++---------+---------+ +---------+---------+
+|        Data       | |        Text       |
+|        Segment    | |       Segment     |
+|                   | |                   |
+|  num1:   10       | |     _start:       |
+|  num2:   20       | |                   |
+|  result: 0        | |  mov eax, dword   |
+|                   | |     [num1]        |
++---------+---------+ |  mov ebx, dword   |
+          |           |     [num2]        |
++---------+---------+ |  add eax, ebx     |
+|                   | |  mov dword        |
+|                   | |     [result], eax |
+|                   | |  mov eax, 1       |
+|                   | |  xor ebx, ebx     |
+|                   | |  int 0x80         |
++-------------------+ +-------------------+
+
+</pre>
+</div>
+<h3>
+    Explanation:
+</h3>
+
+<h4>Initialization:</h4>
+<li>The program starts execution at the _start label.</li>
+<li>Data segment initializes memory locations num1, num2, and result with values 10, 20, and 0 respectively.</li>
+<h4>Moving Data:</h4>
+<li>The values of num1 and num2 are moved from memory to the EAX and EBX registers using MOV instructions.</li>
+<h4>Arithmetic Operation:</h4>
+<li>The ADD instruction adds the values in EAX and EBX, storing the result in EAX.</li>
+<h4>Moving Result:</h4>
+<li>The result in EAX is moved back to memory location result.</li>
+<h4>Exiting Program:</h4>
+<li>The program exits by executing a system call to exit the process with a success status code.</li>
 <h3>Conclusion:</h3>
+
 <p>In this chapter, we've explored the concept of registers in x86 assembly language and discussed the different types of registers and their roles. We've also examined the various data types supported by x86 assembly language and how they are represented and manipulated using registers.
 
     In the next chapter, we'll delve deeper into x86 assembly language instructions and addressing modes. Stay tuned!</p>
