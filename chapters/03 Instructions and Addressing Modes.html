@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 Instructions and Addressing Modes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>03 Instructions and Addressing Modes:</h2>
+    
+<h3>Overview of x86 Instruction Set Architecture (ISA):</h3>
+<p>The x86 ISA includes a vast array of instructions categorized into several groups based on their functionalities. Here's a more comprehensive list of instruction categories commonly found in x86 assembly language programming:</p>
+<h4>Data Movement Instructions:</h4>
+
+<li>MOV: Move data between registers and memory or between registers.</li>
+<li>LEA: Load effective address (calculate memory address).</li>
+<li>XCHG: Exchange the contents of two registers or a register and memory.</li>
+<h4>Arithmetic and Logic Instructions:</h4>
+<li>ADD, SUB, MUL, DIV: Perform arithmetic operations (addition, subtraction, multiplication, division).</li>
+<li>INC, DEC: Increment or decrement a value.</li>
+<li>AND, OR, XOR, NOT: Perform bitwise logical operations.</li>
+<li>SHL, SHR: Shift bits left or right.</li>
+<h4>Control Transfer Instructions:</h4>
+<li>JMP: Unconditionally jump to a different location.</li>
+<li>Jcc: Conditional jumps based on flags (e.g., JE for jump if equal).</li>
+<li>CALL, RET: Call a subroutine or return from a subroutine.</li>
+<li>INT: Generate software interrupt.</li>
+<h4>Comparison Instructions:</h4>
+<li>CMP: Compare two operands and set flags accordingly.</li>
+<li>TEST: Perform bitwise AND operation and set flags.</li>
+<h4>Stack Instructions:</h4>
+<li>PUSH, POP: Push data onto the stack or pop data off the stack.</li>
+<li>PUSHAD, POPAD: Push or pop all general-purpose registers onto or from the stack.</li>
+<li>PUSHF, POPF: Push or pop flags register onto or from the stack.</li>
+<h4>String Instructions:</h4>
+<li>MOVS: Move string data from one location to another.</li>   
+<li>LODS, STOS, SCAS: Load, store, or scan strings.</li>    
+
+<h4>Input/Output Instructions:</h4>
+<li>IN, OUT: Transfer data between I/O ports and accumulator or specified register.</li>
+<h4>Floating-Point Instructions:</h4>
+<li>Instructions for floating-point arithmetic, comparison, and conversion.</li>
+<h4>System Instructions:</h4>
+<li>Instructions for privileged operations, such as modifying control registers or accessing system resources.</li>
+<h4>Miscellaneous Instructions:</h4>
+<li>Instructions for NOP (no operation), HLT (halt processor), etc.</li>
+
+
+<hr>
+<h3> Let's start with a simple example to illustrate how a basic assembly language program works and how the flow of execution progresses through the CPU.</h2>
+
+
+<h3>Example Code: Adding Two Numbers</h3>
+
+<div class="code-block">
+    <pre>
+section .data
+    num1 dd 10        ; Define a double word (4 bytes) variable 'num1' with value 10
+    num2 dd 20        ; Define a double word (4 bytes) variable 'num2' with value 20
+    result dd 0     ; Define a double word (4 bytes) variable 'result' initialized to 0
+
+section .text
+    global _start
+
+_start:
+    ; Move data from memory to registers
+    mov eax, dword [num1]  ; Move the value of 'num1' into register EAX
+    mov ebx, dword [num2]  ; Move the value of 'num2' into register EBX
+    
+    ; Perform addition operation
+    add eax, ebx           ; Add the values in EAX and EBX
+    
+    ; Move result from register to memory
+    mov dword [result], eax ; Move the result into memory location 'result'
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+
+    </pre>
+</div>
+
+<h3>ASCII Diagram:</h3>
+<div class="code-block">
+    <pre>
+        +-------------------+
+        |      Control      |
+        |       Unit        |
+        +---------+---------+
+                  |
+        +---------+---------+
+        |                   |
++---------+---------+ +---------+---------+
+|        Data       | |        Text       |
+|        Segment    | |       Segment     |
+|                   | |                   |
+|  num1:   10       | |     _start:       |
+|  num2:   20       | |                   |
+|  result: 30       | |  mov eax, dword   |
+|                   | |     [num1]        |
++---------+---------+ |  mov ebx, dword   |
+          |           |     [num2]        |
++---------+---------+ |  add eax, ebx     |
+|                   | |  mov dword        |
+|                   | |     [result], eax |   <--- Result stored here
+|                   | |  mov eax, 1       | 
+|                   | |  xor ebx, ebx     |
+|                   | |  int 0x80         |
++-------------------+ +-------------------+
+
+
+In this diagram:
+
+The result variable is shown in the data segment.
+After the addition operation, the result (30) is stored in the memory location reserved for the result variable.
+The memory location where the result is stored is indicated by the arrow and comment: mov dword [result], eax.
+
+So, in the ASCII diagram, the output or result (30) would be represented indirectly by the value stored in the result variable within the data segment.
+
+    </pre>
+</div>
+<h3>Explanation of Flow:</h3>
+<h3>Initialization:</h3>
+<p>The program starts execution at the _start label.</p>
+<p>Data segment initializes memory locations num1, num2, and result with values 10, 20, and 0 respectively.</p>
+
+<h3>Moving Data:</h3>
+<p>The values of num1 and num2 are moved from memory to the EAX and EBX registers using MOV instructions.</p>
+
+<h3>Arithmetic Operation:</h3>
+<p>The ADD instruction adds the values in EAX and EBX, storing the result in EAX.</p>
+
+<h3>Moving Result:</h3>
+<p>The result in EAX is moved back to memory location result.</p>
+
+<h3>Exiting Program:</h3>
+<p>The program exits by executing a system call to exit the process with a success status code.</p>
+
+<p>This example demonstrates the basic flow of execution in an x86 assembly language program, from initialization to data manipulation and program termination.</p>
+<hr>
+<h3>Understanding of Dword:</h3>
+<p>In x86 assembly language, dword stands for "double word," which represents a data type that occupies 4 bytes or 32 bits of memory. It is commonly used to define variables or memory locations that store integer values, memory addresses, or other types of data that require a 32-bit storage space.</p>
+
+<p>Here's a breakdown of commonly used data types in x86 assembly language:</p>
+<li>Byte (BYTE): Represents a single byte (8 bits) of data.</li>
+<li>Word (WORD): Represents a 16-bit (2-byte) data value.</li>
+<li>Double Word (DWORD): Represents a 32-bit (4-byte) data value.</li>
+<li>Quad Word (QWORD): Represents a 64-bit (8-byte) data value.</li>
+<li>Single Precision (REAL4): Represents a single-precision floating-point number (32 bits).</li>
+<li>Double Precision (REAL8): Represents a double-precision floating-point number (64 bits).</li>
+<p>In the example code provided earlier, num1, num2, and result are defined as double words (dword). This means that each of these variables occupies 4 bytes of memory, allowing them to store 32-bit integer values.</p>
+<p>Here's the relevant part of the example code:</p>
+<div class="code-block">
+    <pre>
+section .data
+    num1 dd 10        ; Define a double word (4 bytes) variable 'num1' with value 10
+    num2 dd 20        ; Define a double word (4 bytes) variable 'num2' with value 20
+    result dd 0    ; Define a double word (4 bytes) variable 'result' initialized to 0
+    </pre>
+</div>
+<p>In this code snippet, dd is used to define double-word variables in the data section. The num1, num2, and result variables are initialized to the values 10, 20, and 0 respectively, each occupying 4 bytes of memory.</p>
+<br>
+<p>So, in summary, dword is a data type specifier in x86 assembly language that represents a 32-bit double word, typically used for integers and memory addresses.</p>
+
+<h5>Byte (BYTE): Represents a single byte (8 bits) of data.</h5>
+    <h5>Word (WORD): Represents a 16-bit (2-byte) data value.</h5>
+    <h5>Double Word (DWORD): Represents a 32-bit (4-byte) data value.</h5>
+    <h5>Quad Word (QWORD): Represents a 64-bit (8-byte) data value.</h5>
+    <h5>Single Precision (REAL4): Represents a single-precision floating-point number (32 bits).</h5>
+    <h5>Double Precision (REAL8): Represents a double-precision floating-point number (64 bits).</h5>
+<h3>
+But nothing of the them is used in the code
+do they have shortforms?</h3>
+<p>
+    You're correct that in the provided code example, explicit data type specifiers like BYTE, WORD, DWORD, etc., are not used. Instead, the code directly specifies the size of data by using the appropriate memory allocation directives (db, dw, dd, etc.) in the data section.
+</p>
+<p>In x86 assembly language, the size of data can be specified using various memory allocation directives, and these directives implicitly determine the data type based on the size specified. Here's a summary:</p>
+
+<li>db: Define Byte - Allocates 1 byte of memory, typically used for storing byte-sized data.</li>
+<li>dw: Define Word - Allocates 2 bytes of memory, typically used for storing 16-bit (2-byte) data.</li>
+<li>dd: Define Double Word - Allocates 4 bytes of memory, typically used for storing 32-bit (4-byte) data.</li>
+<li>dq: Define Quad Word - Allocates 8 bytes of memory, typically used for storing 64-bit (8-byte) data.</li>
+<li>ddq: Define Double Quad Word - Allocates 16 bytes of memory, typically used for storing 128-bit (16-byte) data.</li>
+
+<p>These memory allocation directives implicitly specify the size of the data being defined, and the assembler interprets them accordingly.</p>
+
+<p>So, in the provided code example:</p>
+
+<li>dd is used to define double-word variables (num1, num2, result), each allocating 4 bytes of memory, representing 32-bit integer values.</li>
+<li>The size of each variable is implicitly determined as a double word (DWORD) based on the dd directive.</li>
+<br>
+<p>While the explicit data type specifiers like BYTE, WORD, etc., can be used for clarity and readability, it's common in assembly language programming to directly specify the size of data using memory allocation directives.</p>
+
+
+
+<h3>MOV Instruction</h3>
+<p>Description: Move data from one location to another.</p>
+<div class="code-block">
+    <pre>
+section .data
+    src_data dd 42    ; Define a double word (4 bytes) variable 'src_data' with value 42
+    dest_data dd 0    ; Define a double word (4 bytes) variable 'dest_data' initialized to 0
+
+section .text
+    global _start
+
+_start:
+    ; Move data from memory to register
+    mov eax, dword [src_data]  ; Move the value of 'src_data' into register EAX
+    
+    ; Move data from register to memory
+    mov dword [dest_data], eax ; Move the value in EAX register to memory location 'dest_data'
+    
+    ; Exit the program
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+
+    </pre>
+</div>
+<h4>Explanation:</h4>
+<li>The MOV instruction is used to move data between memory and registers.</li>
+<li>In this example, the value stored in the memory location src_data is moved into the EAX register using MOV eax, dword [src_data].</li>
+<li>Then, the value in the EAX register is moved back to the memory location dest_data using MOV dword [dest_data], eax.</li>
+
+<h3>ASCII Diagram:</h3>
+<div class="code-block">
+    <pre>
++------------------------+
+|         Control        |
+|          Unit          |
++----------+-------------+
+           |
++----------+-------------+
+|          |             |
+|   Data   |     Text    |
+|  Segment |    Segment  |
+|          |             |
+|          |             |
+| src_data: 42           |
+| dest_data: 0           |
+|          |             |
++----------+-------------+
+
+    </pre>
+</div>
+<p>This example illustrates how the MOV instruction is used to transfer data between memory and registers.</p>
+<hr>
+<h3>LEA (Load Effective Address)</h3>
+<p>Description: Load effective address (calculate memory address).  </p>
+<p>Example:</p>
+<div class="code-block">
+    <pre>
+section .data
+    array dd 10, 20, 30, 40  ; Define an array of double words
+    format db "%d", 0        ; Format string for displaying integers
+
+section .bss
+    newline resb 1           ; Reserve space for newline character
+
+section .text
+    global _start
+
+
+_start:
+    lea ebx, [array]        ; Load the effective address of 'array' into register EBX
+    
+    ; Accessing array elements using the loaded address
+    mov eax, dword [ebx]    ; Move the first element of the array into EAX
+    add ebx, 4              ; Move to the next element (increment by 4 bytes)
+    mov ecx, dword [ebx]    ; Move the second element of the array into ECX
+    
+    ; Displaying array elements
+    ; Display the value of EAX
+    mov eax, 4              ; System call number for sys_write
+    mov ebx, 1              ; File descriptor (stdout)
+    lea ecx, [format]       ; Pointer to the format string
+    int 0x80                ; Execute syscall to write the format string
+    mov eax, 4              ; System call number for sys_write
+    mov ebx, 1              ; File descriptor (stdout)
+    mov ecx, eax            ; Move the value in EAX to ECX (value to be printed)
+    int 0x80                ; Execute syscall to write the value of EAX
+    
+    ; Display a newline
+    mov eax, 4              ; System call number for sys_write
+    mov ebx, 1              ; File descriptor (stdout)
+    mov ecx, newline        ; Pointer to the newline character
+    mov edx, 1              ; Length of the newline character
+    int 0x80                ; Execute syscall to write the newline character
+
+    ; Display the value of ECX (similar to displaying EAX)
+    ; (Code similar to displaying EAX)
+    
+    ; Exit the program
+    mov eax, 1              ; Exit system call number
+    xor ebx, ebx            ; Exit status code (0 for success)
+    int 0x80                ; Execute syscall to exit
+
+
+
+    </pre>
+</div>
+
+<h4>Explanation:</h4>
+<li>The LEA instruction is used to calculate the effective address of a memory operand and load it into a register.</li>
+<li>In this example, the effective address of the array array is loaded into the EBX register using LEA ebx, [array].</li>
+<li>Then, we access the elements of the array using the loaded address, moving the values into other registers (EAX and ECX).</li>
+<li>After moving the values of EAX and ECX from the array, the code uses system calls to output these values to the console.</li>
+<li>It uses sys_write system calls to display the values.</li>
+<li>Before exiting, it also displays a newline character for better formatting.</li>
+<h3>ASCII Diagram:</h3>
+<div class="code-block">
+    <pre>
+        +------------------------+
+        |         Control        |
+        |          Unit          |
+        +----------+-------------+
+                   |
+        +----------+-------------+
+        |          |             |
+        |   Data   |     Text    |
+        |  Segment |    Segment  |
+        |          |             |
+        |          |             |
+        | array:   |   LEA ebx, [array]
+        |          |   mov eax, dword [ebx]
+        |          |   add ebx, 4
+        |          |   mov ecx, dword [ebx]
+        |          |   
+        +----------+-------------+
+        
+    </pre>
+</div>
+<p>This example demonstrates how the LEA instruction is used to calculate the memory address of an array and load it into a register.</p>
+
+<h3>Questions?</h3>
+<p>Before moving to next instruction, we should know this all:</p>
+<div class="code-block">
+    <pre>
+section .data
+section .text
+section .bss
+    newline resb 1           ; Reserve space for newline character
+
+1.what are they?
+2.is the global only that variable be used in .text or more can be used instead or with global?
+    
+3.explain this:
+    mov eax, 1             ; Exit system call number
+    xor ebx, ebx           ; Exit status code (0 for success)
+    int 0x80               ; Execute syscall to exit
+
+4.what is Exit system call number
+5.what is the use and the meaning of xor ebx, ebx 
+6.why when where how what : int 0x80 <-- explain this briefly
+
+7.is 80h same to 0x80?
+
+8.section .data
+    array dd 10, 20, 30, 40  ; Define an array of double words
+    format db "%d", 0        ; Format string for displaying integers
+
+
+9.what is %d
+and what is the role of that 0 after %d --> format db "%d",0?
+
+
+10.what do you mean by effective address of 'array'
+
+11.why i should use lea instead of mov
+12.when what where: lea?
+</pre>
+</div>
+<h3>Sections in Assembly Language:</h3>
+<li>.data: This section is used to declare initialized data variables.</li>  
+<li>.text: This section is used to write executable instructions.</li>  
+<li>.bss: This section is used to declare uninitialized data variables, also known as the Block Started by Symbol (BSS) section. The resb 1 directive reserves 1 byte of memory for the newline character.</li> 
+<h3>Global vs. Local Variables:</h3>
+<li>The global directive is used to declare a symbol that can be accessed from other files or modules. It typically applies to labels in the .text section.</li>
+<li>Variables declared in the .data or .bss sections are usually accessible within the same file or module without explicitly declaring them as global.</li>
+<h3>Explanation of int 0x80:</h3>
+<li>In x86 assembly language, int 0x80 is a software interrupt instruction used to invoke system calls in Linux. The specific system call to be executed is determined by the value in the eax register. In this case, eax is set to 1, indicating the sys_exit system call, which terminates the program. ebx is set to 0, indicating a successful exit status.</li>
+<h3>Use of xor ebx, ebx:</h3>
+<li>xor ebx, ebx sets the ebx register to zero. It's a common idiom used to clear a register quickly, as XORing a register with itself results in zero. In this context, it ensures that ebx contains the exit status code (0 for success).</li>
+<h3>Effective Address:</h3>
+<li>The effective address of array refers to the memory address where the array is stored. In assembly language, the LEA (Load Effective Address) instruction calculates and loads the memory address of a variable or label into a register without accessing the memory.</li>
+<h3>Difference between mov and lea:</h3>
+<li>mov is used to move data from one location to another, while lea is used specifically to calculate and load the effective address of a memory operand. lea is often preferred when dealing with memory addresses because it is more efficient than using mov in certain cases.</li>
+<h3>format db "%d", 0:</h3>
+<li>%d is a format specifier used in C-style formatting strings. In this context, it indicates that the output should be formatted as a signed decimal integer.</li>
+<li>The 0 after %d is a null terminator, indicating the end of the format string. It ensures that the format string is properly terminated, as expected by standard string functions.</li>
+<h3>0x80 vs. 80h:</h3>
+<li>Yes, 0x80 and 80h represent the same hexadecimal value, which is 128 in decimal.</li>
+
+
+
+
+
+<h3>Conclusion:</h3>
+<p>In this chapter, we've explored the concept of registers in x86 assembly language and discussed the different types of registers and their roles. We've also examined the various data types supported by x86 assembly language and how they are represented and manipulated using registers.
+
+    In the next chapter, we'll delve deeper into x86 assembly language instructions and addressing modes. Stay tuned!</p>
+    </div></div>
+    <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <!-- Taskbar -->
+<div class="taskbar">
+    <a href="02 Registers and Data Types.html">&#9664;</a> <!-- Left arrow -->
+    <a href="../home.html">Home</a> <!-- Home -->
+    <a href="04 .html">&#9654;</a> <!-- Right arrow -->
+  </div>
+</body>
+</html>
