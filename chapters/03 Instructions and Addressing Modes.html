@@ -1298,15 +1298,469 @@ After PUSHAD:
 
 <p>In summary, the stack data structure is essential in computer science and programming for managing memory, controlling program flow, and implementing various algorithms and data structures. Its simplicity, efficiency, and versatility make it a fundamental concept in computer science education and practical programming.</p>
 
+<hr>
+
+<h2>String Instructions:</h2>
+<li>REP: Repeat Prefix</li>
+<li>LODS: Load String</li>
+<li>STOS: Store String</li>
+<li>SCAS: Scan String</li>
+<p>The string instructions in assembly language are used for manipulating sequences of bytes (strings) stored in memory. Let's explore each of these instructions:</p>
+<h3>MOVS (Move String Data):</h3>
+<h4>Description:</h4>
+
+    <li>The MOVS instruction moves a string of bytes from one location in memory to another.</li>
+    <li>It copies bytes from the source address (ES:SI) to the destination address (ES:DI) and automatically increments or decrements the source and destination pointers based on the direction flag (DF).</li>
+
+<h4>Usage:</h4>
+
+    <li>Commonly used for copying, moving, or initializing blocks of memory, such as arrays, strings, or buffers.</li>
+
+<div class="code-block">
+<pre>
+    MOV CX, 10         ; Set the count of bytes to copy
+    MOV SI, source     ; Set the source address
+    MOV DI, destination ; Set the destination address
+    REP MOVS           ; Move 10 bytes from source to destination    
+</pre>
+</div>
+<p>This example copies 10 bytes of data from the source address to the destination address.</p>
+
+<h3>LODS (Load String), STOS (Store String), SCAS (Scan String):</h3>
+
+<h3>LODS:</h3>
+
+    <h4>Description:</h4>
+        <li>The LODS instruction loads a byte, word, or double word from the source address into the AL, AX, or EAX register, respectively.</li>
+    <h4>Usage:</h4>
+        <li>Used for reading data from a string in memory, typically during string processing operations.</li>
+
+<h3>STOS:</h3>
+
+    <h4>Description:</h4>
+        <li>The STOS instruction stores a byte, word, or double word from the AL, AX, or EAX register into the destination address.</li>
+    <h4>Usage:</h4>
+        <li>Used for writing data to a string in memory, such as when constructing or modifying strings.</li>
+
+<h3>SCAS:</h3>
+
+    <h4>Description:</h4>
+        <li>The SCAS instruction compares the byte, word, or double word in the AL, AX, or EAX register with the byte at the source address.</li>
+    <h4>Usage:</h4>
+        <li>Used for searching for a specific byte or value within a string in memory.</li>
+<div class="code-block">
+<pre>
+    ; LODS example
+    MOV CX, 10       ; Set the count of bytes to load
+    MOV SI, source   ; Set the source address
+    LODS             ; Load a byte from the source into AL
+
+    Before LODS:
++-------+           +-------+
+|  CX   |           |  SI   |
++-------+           +-------+
+|   10  |           | Source|
++-------+           +-------+
+                       |
+                       v
+                    +-----+
+                    | ... |
+                    +-----+
+                     ...
+                     ...
+                    +-----+
+                    | ... |
+                    +-----+
+                      ...
+
+After LODS:
++-------+           +-------+
+|  CX   |           |  SI   |
++-------+           +-------+
+|   9   |           | Source|
++-------+           +-------+
+                       |
+                       v
+                    +-----+
+                    | ... |
+                    +-----+
+                     ...
+                     ...
+                    +-----+
+                    | ... |
+                    +-----+
+                    |  AL |
+                    +-----+
 
 
 
+    ; STOS example
+    MOV CX, 10       ; Set the count of bytes to store
+    MOV DI, destination ; Set the destination address
+    MOV AL, 0xFF     ; Set the value to store
+    STOS             ; Store the value in AL into the destination
+    
+    Before STOS:
+    +-------+           +-------+
+    |  CX   |           |  DI   |
+    +-------+           +-------+
+    |   10  |           |Dest.  |
+    +-------+           +-------+
+                           |
+                           v
+                        +-----+
+                        | ... |
+                        +-----+
+                         ...
+                         ...
+                        +-----+
+                        | ... |
+                        +-----+
+    
+    After STOS:
+    +-------+           +-------+
+    |  CX   |           |  DI   |
+    +-------+           +-------+
+    |   9   |           |Dest.  |
+    +-------+           +-------+
+                           |
+                           v
+                        +-----+
+                        | ... |
+                        +-----+
+                         ...
+                         ...
+                        +-----+
+                        |  FF |
+                        +-----+
+
+                        
+
+
+    ; SCAS example
+    MOV CX, 10       ; Set the count of bytes to scan
+    MOV DI, destination ; Set the source address
+    MOV AL, 0xFF     ; Set the value to search for
+    SCAS             ; Compare AL with the byte at DI
 
 
 
+    Before SCAS:
+    +-------+           +-------+
+    |  CX   |           |  DI   |
+    +-------+           +-------+
+    |   10  |           |Dest.  |
+    +-------+           +-------+
+                           |
+                           v
+                        +-----+
+                        | ... |
+                        +-----+
+                         ...
+                         ...
+                        +-----+
+                        | ... |
+                        +-----+
+    
+    After SCAS:
+    +-------+           +-------+
+    |  CX   |           |  DI   |
+    +-------+           +-------+
+    |   9   |           |Dest.  |
+    +-------+           +-------+
+                           |
+                           v
+                        +-----+
+                        | ... |
+                        +-----+
+                         ...
+                         ...
+                        +-----+
+                        | ... |
+                        +-----+
+    
+</pre>
+</div>
+<P>These examples demonstrate loading, storing, and scanning strings using the LODS, STOS, and SCAS instructions, respectively.</P>
 
-  </div></div>
+<h3>Importance and Usage:</h3>
+
+    <li>Efficiency: String instructions provide optimized operations for handling sequences of bytes, making them essential for efficient string processing.</li>
+    <li>Memory Manipulation: They are crucial for tasks such as copying, initializing, searching, and modifying strings stored in memory.</li>
+    <li>Performance: Proper utilization of string instructions can lead to significant performance improvements in string-related operations compared to manual byte-by-byte manipulation.</li>
+
+<h3>Difference between MOV and MOVS:</h3>
+
+    <h4>MOV (Move):</h4>
+        <li>Moves data between two specified locations or registers.</li>
+        <li>Operates on individual data items, such as bytes, words, or double words.</li>
+    <h4>MOVS (Move String Data):</h4>
+        <li>Specifically designed for moving sequences of bytes (strings) between memory locations.</li>
+        <li>Automatically increments or decrements the source and destination pointers to facilitate copying entire blocks of data efficiently.</li>
+
+<p>In summary, string instructions are essential for efficient manipulation of strings in memory, providing optimized operations for copying, loading, storing, and scanning sequences of bytes. Their importance lies in their ability to streamline string processing tasks, leading to improved performance and code readability in assembly language programming.</p>
+<hr>
+
+<p>We will cover the Input/Output Instruction in our 7th Chapter: </p><a href="07 Output Input Operations.html">Input/Ouput Instruction.</a>
+<hr>
+
+<h2>Floating-Point Instructions:</h2>
+<p>Floating-point instructions in assembly language are used for performing arithmetic and mathematical operations on floating-point numbers, which are numbers with fractional parts represented in scientific notation. Here's an overview of floating-point instructions:</p>
+<h3>Floating-Point Arithmetic Instructions:</h3>
+<p>FADD, FSUB, FMUL, FDIV: Perform floating-point addition, subtraction, multiplication, and division, respectively.</p>
+<div class="code-block">
+<pre>FADD xmm0, xmm1   ; Add floating-point values in xmm0 and xmm1</pre>
+</div>
+<p>FADD, FSUB, FMUL, FDIV with Memory: Similar to above, but operate on values stored in memory instead of registers.</p>
+<h3>Other Floating-Point Instructions:</h3>
+<p>FCOM, FCOMI: Compare floating-point values.</p>
+<div class="code-block">
+<pre>FCOM xmm0         ; Compare the value in xmm0 with the accumulator</pre>
+</div>
+<p>FABS: Compute the absolute value of a floating-point number.</p>
+
+
+<div class="code-block">
+<pre>FABS xmm0         ; Compute the absolute value of the value in xmm0</pre>
+    </div>
+
+<p>FNEG: Negate a floating-point number.</p>
+
+
+<div class="code-block">
+<pre>FNEG xmm0         ; Negate the value in xmm0</pre>
+    </div>
+
+
+
+<p>FSQRT: Compute the square root of a floating-point number.</p>
+
+<div class="code-block">
+<pre>FSQRT xmm0        ; Compute the square root of the value in xmm0</pre>
+    </div>
+
+
+
+<P>FPU Control Instructions: Instructions for controlling the behavior of the floating-point unit, such as setting rounding modes or handling exceptions.</P>
+
+<h3>Importance and Usage:</h3>
+<li>Numerical Computations: Floating-point instructions are essential for performing complex mathematical computations involving real numbers, such as scientific calculations, simulations, and engineering applications.</li>
+<br>
+<li>Performance Optimization: Proper utilization of floating-point instructions can lead to significant performance improvements in numerical algorithms and computations.</li>
+<br>
+<li>Precision and Accuracy: Floating-point instructions provide high precision and accuracy in representing and manipulating floating-point numbers, ensuring reliable results in mathematical operations.</li>
+<br>
+<li>Scientific and Engineering Applications: They are widely used in scientific computing, engineering simulations, financial modeling, and other domains that require precise numerical calculations.</li>
+<br>
+<p>In summary, floating-point instructions are crucial for performing arithmetic and mathematical operations involving floating-point numbers in assembly language programming. They provide the foundation for implementing numerical algorithms and computations in various scientific, engineering, and computational applications.</p>
+<br>
+<hr>
+<h2>System Instructions:</h2>
+<p>System instructions in assembly language are specialized instructions used for privileged operations and interactions with the underlying hardware and system resources. These instructions typically involve modifying control registers, accessing system resources, and performing privileged operations that require kernel-level privileges. Here are some common system instructions:</p>
+<h3>System Control Instructions:</h3>
+<p>HLT: Halt the CPU until an interrupt occurs.</p>
+<div class="code-block"><pre>HLT   ; Halt the CPU</pre></div>
+<p>CLI, STI: Clear and set the interrupt flag, respectively.</p>
+<div class="code-block"><pre>
+    CLI   ; Disable interrupts
+    STI   ; Enable interrupts    
+</pre></div>
+<p>PUSHF, POPF: Push and pop the flags register onto and from the stack, respectively.</p>
+<div class="code-block"><pre>
+    PUSHF   ; Push the flags register onto the stack
+    POPF    ; Pop the flags register from the stack    
+</pre></div>
+<h3>Privileged Instructions:</h3>
+<p>LGDT, LIDT, LLDT, LTR: Load the global descriptor table, interrupt descriptor table, local descriptor table, and task register, respectively.</p>
+<div class="code-block"><pre>LGDT [gdt_descriptor]   ; Load the global descriptor table</pre></div>
+<p>SGDT, SIDT, SLDT, STR: Store the global descriptor table, interrupt descriptor table, local descriptor table, and task register, respectively.</p>
+<div class="code-block"><pre>SGDT [gdt_descriptor]   ; Store the global descriptor table</pre></div>
+<h3>Processor Control Instructions:</h3>
+<p>RDMSR, WRMSR: Read from and write to model-specific registers (MSRs).</p>
+<div class="code-block"><pre>RDMSR   ; Read from a model-specific register</pre></div>
+<p>CPUID: Identify the processor and obtain information about its capabilities.</p>
+<div class="code-block"><pre>CPUID   ; Obtain processor information</pre></div>
+
+<h3>Importance and Usage:</h3>
+
+    <li>Privileged Operations: System instructions are essential for performing privileged operations that require kernel-level access, such as managing memory, controlling interrupts, and interacting with system resources.</li>
     <br>
+    <li>Operating System Development: They are commonly used in operating system development for implementing system calls, managing process execution, and controlling hardware resources.</li>
+    <br>
+    <li>Device Drivers: System instructions are utilized in device drivers for interfacing with hardware components, accessing I/O ports, and handling interrupts.</li>
+    <br>
+    <li>Processor Configuration: They provide mechanisms for configuring processor features, accessing model-specific registers (MSRs), and obtaining information about the processor's capabilities.</li>
+    <br>
+<p>In summary, system instructions play a crucial role in low-level programming, operating system development, and hardware interaction by providing mechanisms for privileged operations, processor configuration, and system resource management. They are essential for implementing system-level functionality and controlling the behavior of the underlying hardware in assembly language programming.</p>
+
+
+
+
+
+<hr>
+<h2>Understanding Above Instructions:</h2>
+<p>The HLT instruction in assembly language stands for "Halt" and is used to instruct the CPU to enter a halted state until an interrupt occurs. When the CPU executes the HLT instruction, it stops executing instructions and enters a low-power state where it consumes minimal power and waits for an external interrupt signal to wake it up.</p>
+
+<h3>Here's what it means in more detail:</h3>
+<h4>Meaning of Halt:</h4>
+
+    <li>Halt: Halt means to stop or suspend operation. In the context of the HLT instruction, it refers to suspending the execution of instructions by the CPU.</li>
+
+<h4>Usage:</h4>
+
+    <li>Wait for Interrupt: The primary use of the HLT instruction is to wait for an interrupt to occur. Interrupts are signals generated by hardware devices or software to request the CPU's attention for various tasks, such as I/O operations, timer events, or hardware errors.</li>
+    <br>
+    <li>Power Saving: When the CPU is halted, it enters a low-power state, reducing energy consumption. This is particularly useful in scenarios where the CPU does not have any tasks to perform and can wait for external events to occur before resuming operation.</li>
+    <br>
+    <li>Synchronization: The HLT instruction can also be used for synchronization purposes in multiprocessor systems or when coordinating activities between different components of a system.</li>
+    <br>
+<div class="code-block"><pre>
+main_loop:
+    ; Perform some operations
+    
+    CMP condition, 1       ; Check a condition
+    JE halt_cpu            ; If condition is met, halt the CPU
+    
+    ; Continue normal execution
+    JMP main_loop
+
+halt_cpu:
+    HLT                    ; Halt the CPU until an interrupt occurs
+</pre></div>
+
+<p>In this example, the CPU continuously executes instructions within the main_loop. However, when a certain condition is met (CMP instruction followed by JE), the CPU halts using the HLT instruction, waiting for an interrupt to occur before resuming execution.</p>
+<h3>Usage Scenarios:</h3>
+
+    <li>Power Management: The HLT instruction is commonly used in power management techniques to reduce energy consumption when the CPU is idle.</li>
+
+    <li>Real-Time Systems: In real-time systems, the HLT instruction can be used for precise timing and synchronization to ensure tasks are executed with minimal delay.</li>
+
+    <li>System Debugging: It can also be useful for debugging and testing purposes, allowing developers to pause execution and examine system state.</li>
+
+<p>In summary, the HLT instruction is used to halt the CPU, suspending its operation until an interrupt occurs. It is commonly employed in scenarios where the CPU can wait for external events before resuming execution, such as in power-saving techniques or real-time systems.</p>
+<br> <hr>
+<p>The CLI and STI instructions are used to control the interrupt system of the CPU. Here's what they mean and when they are important:</p>
+<h2>CLI (Clear Interrupt Flag):</h2>
+<h3>Description:</h3> <li>The CLI instruction is used to clear (disable) the interrupt flag (IF) in the flags register. When the interrupt flag is cleared, the CPU ignores (disables) external interrupts.</li>
+
+<h3>Usage:</h3>
+    <li>Used to disable interrupts temporarily, preventing the CPU from responding to external interrupt requests.</li>
+    <li>Important in critical sections of code where interrupt handling could disrupt the execution flow or lead to race conditions.</li>
+
+<h2>STI (Set Interrupt Flag):</h2>
+
+<h3>Description:</h3> <li>The STI instruction is used to set (enable) the interrupt flag (IF) in the flags register. When the interrupt flag is set, the CPU allows (enables) external interrupts.</li>
+
+<h3>Usage:</h3>
+    <li>Used to re-enable interrupts after they have been disabled by the CLI instruction.</li>
+    <li>Allows the CPU to resume responding to external interrupt requests.</li>
+
+<h2>Importance and Usage Scenarios:</h2>
+
+<li>Critical Sections: In scenarios where certain operations must be performed atomically, without interruption from external sources, the CLI instruction can be used to disable interrupts temporarily. This ensures that the critical section of code executes without interruption.</li>
+<br>
+<li>Interrupt Handling: During interrupt service routines (ISRs) or other sections of code where interrupts must be re-enabled after being temporarily disabled, the STI instruction is used to enable interrupts again.</li>
+<div class="code-block"><pre>
+critical_section:
+    CLI               ; Disable interrupts before entering critical section
+    ; Critical section code here (performing operations that must be atomic)
+    STI               ; Re-enable interrupts after critical section
+    ret
+
+main:
+    ; Main code execution
+    call critical_section
+
+</pre></div>
+<p>In this example, the CLI instruction is used to disable interrupts before entering the critical section of code, ensuring that the operations within the critical section are performed atomically without interruption. Once the critical section is complete, the STI instruction is used to re-enable interrupts, allowing the CPU to respond to external interrupt requests again.</p>
+
+<p>These instructions are crucial for managing interrupt handling and ensuring proper synchronization in systems where concurrent execution and interrupt-driven operations are present.</p>
+<hr>
+<p>The PUSHF and POPF instructions are used to manipulate the contents of the flags register (EFLAGS) in assembly language programming. Here's what they mean, why they are used, and when you should use them:</p>
+<h2>PUSHF (Push Flags):</h2>
+<h3>Description:</h3> The PUSHF instruction is used to push the contents of the flags register (EFLAGS) onto the stack.
+
+<h3>Usage:</h3>
+    <li>It saves the current state of the flags register onto the stack, allowing it to be restored later.</li>
+    <li>Useful for preserving the state of the CPU's flags during function calls or context switches.</li>
+<h2>POPF (Pop Flags):</h2>
+
+    <h3>Description:</h3> The POPF instruction is used to pop the contents of the stack into the flags register (EFLAGS).
+
+    <h3>Usage:</h3>
+        <li>It restores the saved state of the flags register from the stack.</li>
+        <li>Used to retrieve the previously saved flags state, typically after a PUSHF instruction.</li>
+
+<h2>Importance and Usage Scenarios:</h2>
+
+    <li>State Preservation: PUSHF and POPF are important for preserving the state of the CPU's flags register across function calls or context switches. This ensures that the CPU's state is maintained during execution and can be restored as needed.</li>
+    <br>
+    <li>Interrupt Handling: They are commonly used in interrupt service routines (ISRs) to save and restore the flags state when handling interrupts. This allows the ISR to execute safely without modifying the state of the CPU.</li>
+    <br>
+    <li>Debugging and Tracing: These instructions can also be useful for debugging and tracing program execution by saving and restoring the flags state at specific points in the code.</li>
+
+<div class="code-block">
+<pre>
+critical_section:
+    PUSHF               ; Save the current flags state onto the stack
+    CLI                 ; Disable interrupts before entering critical section
+    ; Critical section code here (performing operations that must be atomic)
+    POPF                ; Restore the saved flags state from the stack
+    ret
+
+main:
+    ; Main code execution
+    call critical_section
+
+
+
+    Before PUSHF:
+    +-------+
+    |  EFLAGS |     (Flags register)
+    +-------+
+    |   ...   |     (Other stack contents)
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |     (Current stack pointer)
+    +-------+
+    
+    After PUSHF:
+    +-------+
+    |  EFLAGS |     (Flags register)
+    +-------+
+    |  EFLAGS |     (Saved flags on the stack)
+    +-------+
+    |   ...   |     (Other stack contents)
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |
+    +-------+
+    |   ...   |     (Updated stack pointer)
+    +-------+
+</pre>
+</div>
+
+<p>In this example, the PUSHF instruction saves the current state of the flags register onto the stack before entering the critical section of code. This ensures that the flags state is preserved while executing the critical section. After executing the critical section, the POPF instruction restores the saved flags state from the stack, allowing the CPU to resume its previous state.</p>
+
+
+
+
+
+</div></div>
+
+
+
+
+
+
 <br>
 <br>
 <br>
