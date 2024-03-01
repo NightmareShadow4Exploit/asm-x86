@@ -47,6 +47,37 @@
 <p>The Floating-Point Unit (FPU) is responsible for handling floating-point arithmetic (optional on some processors).</p>
 <p>The Memory Management Unit (MMU) handles memory-related operations such as virtual memory translation (optional on some processors).</p>
    <br>
+<hr>
+<h2>Flags</h2>
+<p>In x86 assembly language, there are several types of flags that provide information about the outcome of arithmetic and logical operations. Let's go through each of them:</p>
+<h3>Zero Flag (ZF):</h3>
+
+    <li>This flag is set (ZF = 1) if the result of an operation is zero, and it is cleared (ZF = 0) otherwise.</li>
+    <li>Used in conditional jumps like je (Jump if Equal) or jz (Jump if Zero) to perform actions based on whether the result is zero.</li>
+<h4>Carry Flag (CF):</h4>
+
+    <li>The carry flag indicates whether an arithmetic operation resulted in a carry out of the most significant bit (MSB) of the result.</li>
+    <li>Used for multi-byte arithmetic and bitwise operations, as well as for unsigned comparison operations.</li>
+
+<h4>Sign Flag (SF):</h4>
+
+    <li>The sign flag reflects the sign of the result of an operation. If the result is negative, SF is set (SF = 1); otherwise, it's cleared (SF = 0).</li>
+    <li>Used in conditional jumps like js (Jump if Sign) to perform actions based on the sign of the result.</li>
+
+<h4>Overflow Flag (OF):</h4>
+
+    <li>The overflow flag indicates if the signed result of an arithmetic operation exceeded the representable range.</li>
+    <li>Used for signed arithmetic operations to detect overflow conditions.</li>
+
+<h4>Parity Flag (PF):</h4>
+
+    <li>The parity flag indicates whether the number of set bits in the least significant byte (LSB) of the result is even (PF = 1) or odd (PF = 0).</li>
+    <li>Used for error checking and detection, particularly in communication protocols.</li>
+
+<h4>Auxiliary Carry Flag (AF):</h4>
+
+    <li>This flag is used for binary-coded decimal (BCD) arithmetic operations.</li>
+    <li>Indicates whether a carry occurred between the low nibble (4 bits) and the high nibble during an arithmetic operation.</li>
    <p>Conclusion:</p>
    
    <p>In this chapter, we've introduced the basics of x86 assembly language and provided an overview of its architecture. In the following chapters, we'll delve deeper into topics such as registers, instructions, memory access, and control flow.</p>

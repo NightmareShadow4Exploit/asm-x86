@@ -892,6 +892,418 @@ Flags: The shift operation affects the Carry flag (CF) and the Zero flag (ZF).
 <li>Optimization: Used for optimizing code and data storage by efficiently manipulating data at the bit level.</li>
 
 <p>These instructions are commonly used in low-level programming, hardware interfacing, and various other applications where fine-grained control over individual bits is required.</p>
+<hr>
+<h2>Control Transfer Instructions:</h2>
+<h3>JMP (Unconditional Jump):</h3>
+<h4>Description:</h4>
+
+    <li>The JMP instruction unconditionally transfers control to a different location in the code.</li>
+
+<h4>Usage:</h4>
+
+    <li>Used for implementing loops, conditional branching, and subroutine calls.</li>
+<div class="code-block">
+    <pre>
+JMP target_label
+    </pre>
+</div>
+<p>This instruction will transfer control to the location specified by the target_label unconditionally.</p>
+
+<h3>Jcc (Conditional Jumps):</h3>
+<h4>Description:</h4>
+
+<li>The Jcc instructions are conditional jumps based on the status of the flags register.</li>
+<li>For example, JE jumps if the Zero flag (ZF) is set (i.e., the result of the previous operation was zero).</li>
+<li>JNE means if not equal or same.</li>
+
+
+<h4>Usage:</h4>
+
+<li>Used for implementing conditional branching and executing code based on specific conditions.</li>
+<div class="code-block">
+    <pre>
+        CMP eax, ebx     ; Compare two values
+        JE target_label  ; Jump to target_label if equal
+    </pre>
+</div>
+
+<h3>CALL and RET (Subroutine Calls and Returns):</h3>
+<h3>CALL:</h3>
+
+    <h4>Description:</h4>
+        <li>The CALL instruction calls a subroutine or function.</li>
+        <li>It saves the return address (the address of the instruction immediately following the CALL) onto the stack and transfers control to the specified subroutine.</li>
+    <h4>Usage:</h4>
+        <li>Used for modularizing code and implementing functions or procedures.</li>
+<div class="code-block">
+    <pre>
+        CALL any_function
+    </pre>
+</div>
+<h3>RET:</h3>
+<h4>Description:</h4>
+
+    <li>The RET instruction returns from a subroutine.</li>
+    <li>It retrieves the return address from the stack and transfers control back to the instruction immediately following the corresponding CALL.</li>
+
+<h4>Usage:</h4>
+
+    <li>Used to return control from a subroutine back to the calling code.</li>
+<div class="code-block">
+    <pre>
+        RET
+
+    </pre>
+</div>
+
+<h3>INT (Software Interrupt):</h3>
+<h4>Description:</h4>
+
+    <li>The INT instruction generates a software interrupt.</li>
+    <li>It invokes an interrupt handler routine specified by the interrupt number.</li>
+
+<h4>Usage:</h4>
+
+    <li>Used for invoking system calls, BIOS calls, and interrupt-driven I/O operations.</li>
+
+<div class="code-block">
+    <pre>
+        MOV AH, 0x4C    ; Set the AH register with the exit code
+        INT 0x21        ; Generate software interrupt to terminate the program
+    </pre>
+</div>
+
+<h3>Combined Example:</h3>
+<div class="code-block">
+    <pre>
+; means comment
+section .data
+        n1 DD 10
+        n2 DD 20
+section .text
+    global _start
+
+_start:
+    ; Unconditional Jump (JMP)
+    ;JMP function_a         ----> this is commented, so that it do not go to function_a as its unconditional
+
+    ; Conditional Jump (Jcc)
+    MOV eax, [n1]
+    MOV ebx, [n2]
+    CMP eax, ebx     ; Compare two values
+    JE equal_label   ; Jump if equal
+    JNE not_equal_label ; Jump if not equal
+
+    ; Subroutine Call (CALL and RET)
+    CALL subroutine_label
+    RET
+
+    ; Software Interrupt (INT)
+    MOV AH, 0x4C    ; Set the AH register with the exit code
+    INT 0x21        ; Generate software interrupt to terminate the program
+
+function_a:
+    ; Code at target label
+    ; This code will be executed after the JMP instruction
+
+equal_label:
+    ; Code at equal label
+    ; This code will be executed if the result of the comparison is equal
+
+not_equal_label:
+    ; Code at not equal label
+    ; This code will be executed if the result of the comparison is not equal
+
+subroutine_label:
+    ; Code for the subroutine
+    RET             ; Return from subroutine
+
+    </pre>
+</div>
+<p>This example demonstrates the usage of all the control transfer instructions in assembly language. Each instruction serves a different purpose and is used in various programming scenarios to control the flow of execution within the program. Let me know if you need further explanation on any specific instruction!</p>
+<hr>
+<h2>Comparison Instructions:</h2>
+<h3>CMP (Compare):</h3>
+
+    <h4>Description:</h4>
+        <li>The CMP instruction compares two operands and sets the flags accordingly.</li>
+        <li>It performs a subtraction operation between the operands but does not store the result; instead, it updates the flags register based on the result of the comparison.</li>
+    <h4>Usage:</h4>
+        <li>Used to compare two values without modifying any operands directly.</li>
+        <li>Often used before conditional jump instructions (Jcc) to implement conditional branching based on the result of the comparison.</li>
+
+<div class="code-block">
+    <pre>
+        CMP eax, ebx   ; Compare the values in the EAX and EBX registers
+    </pre>
+</div>
+<p>After this instruction, the flags register is updated based on the result of the comparison between the values in EAX and EBX.</p>
+<h3>TEST:</h3>
+
+    <h4>Description:</h4>
+        <li>The TEST instruction performs a bitwise AND operation between two operands and sets the flags accordingly.</li>
+        <li>It performs the AND operation but discards the result; instead, it updates the flags register based on the result of the operation.</li>
+    <h4>Usage:</h4>
+        <li>Used to test the bits of a value without modifying any operands directly.</li>
+        <li>Often used to check the status of specific bits or to verify the presence of specific flags.</li>
+<div class="code-block">
+    <pre>
+    TEST eax, ebx   ; Perform bitwise AND between the values in the EAX and EBX registers
+    </pre>
+</div>
+<p>After this instruction, the flags register is updated based on the result of the bitwise AND operation between the values in EAX and EBX.</p>
+<h3>Comparison Instructions Summary:</h3>
+<li>CMP: Used to compare two values and update the flags register based on the result of the comparison.</li>
+<li>TEST: Used to perform a bitwise AND operation between two values and update the flags register based on the result of the operation.</li>
+
+<p>Both instructions are essential for implementing conditional branching and making decisions based on the comparison or status of specific bits in assembly language programming.</p>
+<hr>
+
+<h2>Stack Instructions:</h2>
+<li>PUSH, POP: Push data onto the stack or pop data off the stack.</li>
+<li>PUSHAD, POPAD: Push or pop all general-purpose registers onto or from the stack.</li>
+<li>PUSHF, POPF: Push or pop flags register onto or from the stack.</li>
+<br>
+<p>Let's explore the stack instructions PUSH, POP, PUSHAD, POPAD, PUSHF, and POPF, along with ASCII diagrams to explain how they work:</p>
+<br> <h3>PUSH (Push Data onto the Stack):</h3>
+
+<h4>Description:</h4>
+
+    <li>PUSH instruction pushes a value onto the top of the stack.</li>
+    <li>Decrements the stack pointer (ESP register) and stores the value at the new top-of-stack address.</li>
+<div class="code-block">
+<pre>
+PUSH eax    ; Push the value in the EAX register onto the stack:
+
+Before PUSH:
+|   ...   |
++---------+
+|   ...   |
++---------+
+|   ...   |
++---------+ <-- ESP (Stack Pointer)
+
+After PUSH:
+|   ...   |
++---------+
+|   ...   |
++---------+
+|  Value  | <-- ESP (Stack Pointer)
++---------+
+
+    </pre>
+</div>
+
+<h3>POP (Pop Data off the Stack):</h3>
+<h4>Description:</h4>
+
+    <li>POP instruction removes the value from the top of the stack and stores it into the specified destination operand.</li>
+    <li>Increments the stack pointer (ESP register) to point to the next value on the stack.</li>
+<div class="code-block">
+    <pre>
+        
+POP ebx    ; Pop the top value from the stack and store it in the EBX register:
+
+Before POP:
+|   ...   |
++---------+
+|   ...   |
++---------+
+|  Value  | <-- ESP (Stack Pointer)
++---------+
+
+After POP:
+|   ...   |
++---------+
+|   ...   |
++---------+
+|   ...   | <-- ESP (Stack Pointer)
++---------+
+
+    </pre>
+</div>
+
+<h3>PUSHAD and POPAD (Push and Pop All General-Purpose Registers):</h3>
+<h4>Description:</h4>
+
+    <li>PUSHAD instruction pushes all the general-purpose registers (EAX, EBX, ECX, EDX, ESI, EDI, EBP, ESP) onto the stack.</li>
+    <li>POPAD instruction pops all the general-purpose registers from the stack.</li>
+<div class="code-block">
+    <pre>
+PUSHAD     ; Push all general-purpose registers onto the stack
+...
+POPAD      ; Pop all general-purpose registers from the stack
+Before PUSHAD:
++---------+ <-- ESP (Stack Pointer)
+|   ...   |
++---------+
+|   ...   |
++---------+
+|   ...   |
++---------+
+
+After PUSHAD:
++---------+ <-- ESP (Stack Pointer)
+|   EAX   |
++---------+
+|   EBX   |
++---------+
+|   ECX   |
++---------+
+|   EDX   |
++---------+
+|   ESI   |
++---------+
+|   EDI   |
++---------+
+|   EBP   |
++---------+
+|   ESP   |
++---------+
+    </pre>
+</div>
+<h3>POPAD (Pop All General-Purpose Registers):</h3>
+
+    <h4>Description:</h4>
+        <li>POPAD instruction pops all the general-purpose registers from the stack.</li>
+<div class="code-block">
+<pre>
+    Before POPAD:
+    +---------+
+    |   EAX   |
+    +---------+
+    |   EBX   |
+    +---------+
+    |   ECX   |
+    +---------+
+    |   EDX   |
+    +---------+
+    |   ESI   |
+    +---------+
+    |   EDI   |
+    +---------+
+    |   EBP   |
+    +---------+
+    |   ESP   | <-- ESP (Stack Pointer)
+    
+    After POPAD:
+    +---------+ <-- ESP (Stack Pointer)
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    
+</pre>
+</div>
+<h3>PUSHF (Push Flags Register):</h3>
+
+<h4>Description:</h4>
+<li>PUSHF instruction pushes the flags register (EFLAGS) onto the stack.</li>
+
+<h3>POPF (Pop Flags Register):</h3>
+
+<h4>Description:</h4>
+        <li>POPF instruction pops the flags register from the stack.</li>
+<div class="code-block">
+<pre>
+    Before PUSHF:
+    +---------+ <-- ESP (Stack Pointer)
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+
+    After PUSHF:
+    +---------+ <-- ESP (Stack Pointer)
+    |  FLAGS  |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    
+
+
+
+
+
+
+
+
+
+    Before POPF:
+    +---------+ <-- ESP (Stack Pointer)
+    |  FLAGS  |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    
+    After POPF:
+    +---------+ <-- ESP (Stack Pointer)
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    |   ...   |
+    +---------+
+    
+</pre>
+</div>
+<p>These ASCII diagrams illustrate how PUSHAD, POPAD, PUSHF, and POPF instructions manipulate the stack and the registers during their execution. Let me know if you need further clarification or additional examples!</p>
+<hr>
+<h2>Stack:</h2>
+<p>A stack is a fundamental data structure in computer science that operates on the Last-In-First-Out (LIFO) principle. In a stack, elements are inserted (pushed) and removed (popped) from the same end, which is typically referred to as the top of the stack. The stack is widely used in various areas of computer science and programming for its simplicity and efficiency in managing data and controlling program flow. Here's why we use stacks and their main purposes:</p>
+<h3>Main Purpose of Stack:</h3>
+
+    <h4>Memory Management:</h4>
+        <li>The stack is crucial for managing memory during program execution. It provides a contiguous block of memory allocated for function calls, local variables, and other temporary data.</li>
+        <li>Each function call and local variable declaration is pushed onto the stack, and when the function returns or the variable goes out of scope, they are popped off the stack, freeing up memory.</li>
+
+    <h4>Function Calls and Execution Context:</h4>
+        <li>Stacks are used to manage the execution context during function calls. When a function is called, its parameters, return address, and other necessary information are pushed onto the stack as a stack frame.</li>
+        <li>Upon returning from the function, the stack frame is popped off, and control returns to the calling function with the proper state restored.</li>
+
+    <h4>Expression Evaluation:</h4>
+        <li>Stacks are used in expression evaluation and parsing algorithms, such as infix to postfix conversion and evaluating postfix expressions.</li>
+        <li>They are also used in evaluating arithmetic expressions with parentheses to maintain the correct order of operations.</li>
+
+    <h4>Algorithm Implementation:</h4>
+        <li>Stacks are used in various algorithms and data structures, such as depth-first search (DFS) in graph traversal, backtracking algorithms, and implementing undo-redo functionality in applications.</li>
+
+    <h4>System Call and Interrupt Handling:</h4>
+        <li>Stacks are utilized in handling system calls, interrupts, and exceptions in operating systems. When an interrupt occurs, the processor's state is saved onto the stack to handle the interrupt routine, and then restored afterward.</li>
+
+<h3>Crucial Applications of Stacks:</h3>
+
+    <li>Compiler Construction: Stacks are used in compiler construction for parsing, evaluating expressions, and managing the execution of functions and procedures.</li>
+    <li>Operating Systems: Stacks play a vital role in managing process execution, memory allocation, and handling interrupts and exceptions in operating systems.</li>
+    <li>Recursive Algorithms: Stacks are essential for implementing recursive algorithms in programming languages, as they provide a mechanism for managing recursive function calls.</li>
+    <li>Memory Management: Stacks are crucial for managing memory efficiently, especially in embedded systems and resource-constrained environments.</li>
+
+<p>In summary, the stack data structure is essential in computer science and programming for managing memory, controlling program flow, and implementing various algorithms and data structures. Its simplicity, efficiency, and versatility make it a fundamental concept in computer science education and practical programming.</p>
+
+
+
+
+
+
+
 
   </div></div>
     <br>
@@ -919,7 +1331,7 @@ Flags: The shift operation affects the Carry flag (CF) and the Zero flag (ZF).
 <div class="taskbar">
     <a href="02 Registers and Data Types.html">&#9664;</a> <!-- Left arrow -->
     <a href="../home.html">Home</a> <!-- Home -->
-    <a href="04 .html">&#9654;</a> <!-- Right arrow -->
+    <a href="04 Control Flow and Conditional Execution.html">&#9654;</a> <!-- Right arrow -->
   </div>
 </body>
 </html>
