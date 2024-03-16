@@ -7,6 +7,333 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="container">
+<p>Great! Let's delve into the fourth chapter, which covers Control Flow and Conditional Execution in x86 assembly language.</p>
+<br>
+<p>Control flow instructions allow you to change the order in which instructions are executed based on conditions or program state. Conditional execution instructions enable you to execute certain instructions only if specific conditions are met. These capabilities are fundamental for implementing decision-making and branching logic in assembly language programs.</p>
+<br>
+<p>We'll cover various control flow and conditional execution instructions, including unconditional jumps (JMP), conditional jumps (Jcc), subroutine calls and returns (CALL and RET), interrupt generation (INT), and more.</p>
+
+
+
+<p>Let's begin by exploring the basic control flow instructions in x86 assembly language:</p>
+
+    <h3>Unconditional Jump (JMP):</h3>
+        <li>Description: The JMP instruction transfers control to a specified destination, unconditionally changing the flow of execution.</li>
+        <li>Usage: It is commonly used for implementing loops, switch statements, and branching to different parts of the code.</li>
+        <li>Syntax: JMP destination</li>
+
+<div class="code-block">
+<pre>jmp target_label   ; Jump to the target_label unconditionally</pre>
+</div>
+<h3>Conditional Jumps (Jcc):</h3>
+
+    <li>Description: Conditional jumps transfer control to a destination based on the status of specific CPU flags (e.g., zero flag, carry flag).</li>
+    <li>Usage: They are used for implementing conditional statements such as if-else conditions, loops with exit conditions, and comparisons.</li>
+    <li>Syntax: Jcc destination</li>
+    <div class="code-block">
+<pre>
+  cmp eax, ebx       ; Compare the values in eax and ebx
+  je equal_label     ; Jump to equal_label if the values are equal (ZF=1)  
+</pre>
+</div>
+<h3>Call and Return (CALL, RET):</h3>
+
+    <li>Description:
+        CALL is used to call (jump to) a subroutine, storing the return address on the stack.
+        RET is used to return from a subroutine, popping the return address from the stack and transferring control back to the caller.</li>
+    <li>Usage: They are essential for implementing modular and reusable code, allowing functions to be called and returned from.</li>
+    <li>Syntax:
+        CALL subroutine_label
+        RET</li>
+<div class="code-block">
+<pre>
+  call subroutine    ; Call the subroutine
+  ...
+  subroutine:
+      ; Subroutine code
+      ret             ; Return from the subroutine
+  
+</pre>
+</div>
+<h3>Interrupt Generation (INT):</h3>
+
+    <li>Description: The INT instruction generates a software interrupt, transferring control to an interrupt service routine (ISR) specified by the interrupt vector.</li>
+    <li>Usage: It is used for invoking system services, handling exceptions, and interacting with the operating system.</li>
+    <li>Syntax: INT n</li>
+<div class="code-block">
+<pre>
+  int 0x80           ; Invoke system service via interrupt 0x80
+; int 80h
+</pre>
+</div>
+<hr>
+<h2>Jumps:</h2>
+<li>JE: Jump if Equal (ZF=1)</li> <br>
+<li>JNE: Jump if Not Equal (ZF=0)</li> <br>
+<li>JZ: Jump if Zero (ZF=1)</li> <br>
+<li>JNZ: Jump if Not Zero (ZF=0)</li> <br>
+<li>JA: Jump if Above (CF=0 and ZF=0)</li> <br>
+<li>JAE: Jump if Above or Equal (CF=0)</li> <br>
+<li>JB: Jump if Below (CF=1)</li> <br>
+<li>JBE: Jump if Below or Equal (CF=1 or ZF=1)</li> <br>
+<li>JC: Jump if Carry (CF=1)</li> <br>
+<li>JNC: Jump if No Carry (CF=0)</li> <br>
+<li>JS: Jump if Sign (SF=1)</li> <br>
+<li>JNS: Jump if No Sign (SF=0)</li> <br>
+<li>JO: Jump if Overflow (OF=1)</li> <br>
+<li>JNO: Jump if No Overflow (OF=0)</li> <br>
+<li>JP: Jump if Parity (PF=1)</li> <br>
+<li>JNP: Jump if No Parity (PF=0)</li> <br>
+<li>JG: Jump if Greater (ZF=0 and SF=OF)</li> <br>
+<li>JGE: Jump if Greater or Equal (SF=OF)</li> <br>
+<li>JL: Jump if Less (SF!=OF)</li> <br>
+<li>JLE: Jump if Less or Equal (ZF=1 or SF!=OF)</li> <br>
+<p>These conditional jumps provide flexibility for implementing various control flow logic based on different conditions. The choice of which instruction to use depends on the specific requirements of your program and the conditions you want to check.</p>
+<hr>
+<h2>
+Loops
+</h2>
+<p>A loop in programming is a control flow construct that allows a set of instructions to be executed repeatedly until a certain condition is met. Loops are essential for performing repetitive tasks efficiently and are commonly used in various programming scenarios.</p>
+
+<h3>Here's why loops are needed:</h3>
+
+<li>Repetitive Tasks: Loops allow us to execute a set of instructions multiple times without having to write the same code repeatedly.</li> <br>
+<li>Efficiency: Instead of manually repeating instructions, loops enable us to achieve the same result with less code, making our programs more concise and easier to maintain.</li> <br>
+<li>Dynamic Control Flow: Loops provide flexibility in handling variable data lengths or conditions, allowing us to adapt to changing situations during program execution.</li> <br>
+<li>Automation: Many real-world tasks involve performing the same operation on a collection of data or processing inputs until a specific condition is satisfied, which loops facilitate efficiently.</li> <br>
+<p>To create a loop in assembly language, you typically use conditional jump instructions along with labels to define the beginning and end of the loop. Here's a simple example of a loop in x86 assembly language using the JMP instruction:</p>
+<div class="code-block">
+<pre>
+loop_start:
+  ; Code block to be executed in the loop
+
+  ; Check loop exit condition
+  ; If condition is met, exit the loop
+  cmp eax, 10         ; Compare with loop exit condition
+  jge loop_exit       ; Jump to loop_exit if condition is met
+
+  ; Increment loop counter or update loop variables
+  inc eax             ; Increment loop counter (example)
+
+  ; Jump back to loop_start to repeat the loop
+  jmp loop_start
+
+loop_exit:
+  ; Code to execute after exiting the loop
+
+</pre>
+</div>
+<li>loop_start marks the beginning of the loop.</li> <br>
+<li>The loop executes the code block repeatedly until the loop exit condition is met (cmp instruction followed by a conditional jump).</li> <br>
+<li>Within the loop, you can perform any desired operations, such as processing data or performing calculations.</li> <br>
+<li>After each iteration, the loop counter or relevant loop variables are updated to progress towards the exit condition.</li> <br>
+<li>Once the exit condition is satisfied, the loop exits, and execution continues with the code following the loop (loop_exit).</li> <br>
+<p>This basic loop structure can be adapted to different scenarios by adjusting the loop exit condition, the code executed within the loop, and any necessary loop control variables. Loops can vary in complexity and may involve nested loops, multiple exit conditions, or different types of loop constructs, depending on the specific requirements of the program.</p>
+<hr>
+<p>Let's explore a more complex example of a loop in x86 assembly language that involves nested loops and multiple exit conditions. In this example, we'll create a program that generates the multiplication table for numbers 1 to 10.</p>
+<div class="code-block">
+<pre>
+section .text
+  global _start
+
+_start:
+  mov ecx, 1              ; Initialize outer loop counter to 1
+
+outer_loop:
+  mov ebx, 1              ; Initialize inner loop counter to 1
+
+inner_loop:
+  ; Multiply ecx by ebx and store the result in eax
+  mov eax, ecx            ; Load outer loop counter value
+  mul ebx                 ; Multiply by inner loop counter
+  ; Display the multiplication result
+  call print_number       ; Call subroutine to print the result
+
+  ; Increment inner loop counter (ebx)
+  inc ebx
+  cmp ebx, 11             ; Check if inner loop counter reached 11 (exit condition)
+  jne inner_loop          ; Jump back to inner_loop if not
+
+  ; Increment outer loop counter (ecx)
+  inc ecx
+  cmp ecx, 11             ; Check if outer loop counter reached 11 (exit condition)
+  jne outer_loop          ; Jump back to outer_loop if not
+
+  ; Exit the program
+  mov eax, 1              ; Exit system call number
+  xor ebx, ebx            ; Exit status code (0 for success)
+  int 0x80                ; Execute syscall to exit
+
+; Subroutine to print a number
+print_number:
+  ; Convert the number in eax to ASCII characters and print
+  ; (Implementation of this subroutine depends on the method of output, e.g., console output or display)
+  ; For simplicity, let's assume a console output function is provided
+  ; The code for converting numbers to ASCII and printing is omitted for brevity
+  ret
+
+</pre>
+</div>
+<li>We have an outer loop that iterates from 1 to 10 (outer_loop) and an inner loop nested within it that also iterates from 1 to 10 (inner_loop).</li>
+<li>Inside the inner loop, we multiply the current values of the outer loop counter (ecx) and the inner loop counter (ebx) and print the result using a subroutine (print_number).</li>
+<li>After each iteration of the inner loop, we check if the inner loop counter has reached 11. If not, we continue the inner loop. Similarly, we check if the outer loop counter has reached 11 to exit the outer loop.</li>
+<li>Once both loops complete, the program exits.</li>
+
+<p>This example demonstrates how to implement nested loops and manage multiple exit conditions in x86 assembly language. It generates the multiplication table from 1 to 10, printing each result as it computes them.</p>
+
+<hr>
+<br>
+<p>Branching constructs in assembly language refer to control flow instructions that allow the program to branch or change the execution path based on certain conditions or criteria. These constructs enable the implementation of decision-making logic and branching behavior similar to conditional statements in higher-level programming languages.</p>
+<p>Here are some common types of branching constructs in assembly language:</p>
+
+<h3>Conditional Branching:</h3>
+<li>Conditional branching involves executing different code paths based on the evaluation of specific conditions or flags.</li>
+<li>Instructions such as Jcc (conditional jump) and CMP (compare) are used to implement conditional branching.</li>
+
+<h3>Unconditional Branching:</h3>
+<li>Unconditional branching involves unconditionally transferring control to a specified destination in the code.</li>
+<li>Instructions like JMP (jump) are used for unconditional branching, where execution continues at the target label or address.</li>
+
+<h3>Conditional Execution:</h3>
+<li>Conditional execution allows instructions to be conditionally executed or skipped based on certain conditions without explicitly branching.</li>
+<li>Instructions such as CMOVcc (conditional move) and SETcc (set if condition) are used for conditional execution.</li>
+<div class="code-block">
+<pre>
+section .data
+  value1 dd 10
+  value2 dd 20
+  result dd 0
+
+section .text
+  global _start
+
+_start:
+  ; Compare the values
+  mov eax, dword [value1]
+  cmp eax, dword [value2]
+
+  ; If value1 is greater than value2, move value1 into result
+  cmovg eax, dword [result]   ; Conditional move if greater (CMOVG)
+                              ; Moves value1 into result if greater
+  ; If value1 is less than or equal to value2, set result to 100
+  setle byte [result], 100    ; Set result to 100 if less than or equal (SETLE)
+
+  ; Exit the program
+  mov eax, 1              ; Exit system call number
+  xor ebx, ebx            ; Exit status code (0 for success)
+  int 0x80                ; Execute syscall to exit
+
+</pre>
+</div>
+
+<h3>Branching to Subroutines:</h3>
+<li>Subroutine calls (CALL) and returns (RET) enable branching to and returning from subroutines or functions, facilitating modular and reusable code organization.</li>
+
+<h3>Interrupt-Driven Branching:</h3>
+<li>Interrupt instructions (INT) enable branching to interrupt service routines (ISRs) in response to hardware or software interrupts, allowing the program to handle asynchronous events.</li>
+
+<p>Branching constructs are essential for implementing complex control flow logic, including decision-making, looping, error handling, and interrupt handling, in assembly language programs. They provide the flexibility and versatility needed to create efficient and functional programs that respond to different scenarios and conditions during execution.</p>
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<li>Looping Constructs: Assembly language provides various ways to implement loops, including LOOP, JMP-based loops, and conditional jumps.</li>
+<br>
+<li>Branching Constructs: In addition to conditional jumps, branching constructs such as IF, ELSE, and ENDIF may be covered, especially in higher-level assembly languages.</li>
+<br>
+<li>Switch Statements: Techniques for implementing switch or case statements using conditional jumps or lookup tables.</li>
+<br>
+<li>Procedure Calls and Returns: Further exploration of subroutine calls (CALL) and returns (RET), including parameter passing and stack management.</li>
+<br>
+<li>Interrupt Handling: Dealing with interrupts, both hardware and software, and how they affect program flow.</li>
+<br>
+<li>Error Handling: Strategies for handling errors and exceptions in assembly language programs.</li>
+<br>
+<li>Control Flow Optimization: Techniques for optimizing control flow, including loop unrolling, loop fusion, and conditional move instructions (CMOV).</li>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
 <div class="taskbar">
     <a href="03 Instructions and Addressing Modes.html">&#9664;</a> 
     <a href="../home.html">Home</a> 
